@@ -39,7 +39,7 @@ require (
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.0
 	github.com/superseriousbusiness/activity v1.2.1-gts
-	github.com/superseriousbusiness/exif-terminator v0.4.0
+	github.com/superseriousbusiness/exif-terminator v0.5.0
 	github.com/superseriousbusiness/oauth2/v4 v4.3.2-SSB
 	github.com/tdewolff/minify/v2 v2.12.1
 	github.com/ulule/limiter/v3 v3.10.0
@@ -51,7 +51,7 @@ require (
 	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d
 	golang.org/x/net v0.0.0-20220909164309-bea034e7d591
 	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
-	golang.org/x/text v0.3.7
+	golang.org/x/text v0.4.0
 	gopkg.in/mcuadros/go-syslog.v2 v2.3.0
 	modernc.org/sqlite v1.18.2
 	mvdan.cc/xurls/v2 v2.4.0
@@ -129,7 +129,7 @@ require (
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	golang.org/x/image v0.0.0-20220902085622-e7cb96979f69 // indirect
+	golang.org/x/image v0.1.0 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220907135952-02c991387e35 // indirect
 	golang.org/x/sys v0.0.0-20220913120320-3275c407cedc // indirect
 	golang.org/x/tools v0.1.12 // indirect
