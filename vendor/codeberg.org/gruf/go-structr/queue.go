@@ -205,6 +205,24 @@ func (q *Queue[T]) Len() int {
 	return l
 }
 
+// Debug returns debug stats about queue.
+func (q *Queue[T]) Debug() map[string]any {
+	m := make(map[string]any)
+	q.mutex.Lock()
+	m["queue"] = q.queue.len
+	indices := make(map[string]any)
+	m["indices"] = indices
+	for i := range q.indices {
+		var n uint64
+		for _, list := range q.indices[i].data {
+			n += uint64(list.len)
+		}
+		indices[q.indices[i].name] = n
+	}
+	q.mutex.Unlock()
+	return m
+}
+
 func (q *Queue[T]) pop_n(n int, next func() *list_elem) []T {
 	if next == nil {
 		panic("nil fn")
@@ -258,6 +276,12 @@ func (q *Queue[T]) pop_n(n int, next func() *list_elem) []T {
 
 func (q *Queue[T]) index(value T) *indexed_item {
 	item := new_indexed_item()
+	if cap(item.indexed) < len(q.indices) {
+
+		// Preallocate item indices slice to prevent Go auto
+		// allocating overlying large slices we don't need.
+		item.indexed = make([]*index_entry, 0, len(q.indices))
+	}
 
 	// Set item value.
 	item.data = value

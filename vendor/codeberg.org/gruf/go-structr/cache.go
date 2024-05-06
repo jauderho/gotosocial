@@ -527,6 +527,24 @@ func (c *Cache[T]) Len() int {
 	return l
 }
 
+// Debug returns debug stats about cache.
+func (c *Cache[T]) Debug() map[string]any {
+	m := make(map[string]any)
+	c.mutex.Lock()
+	m["lru"] = c.lru.len
+	indices := make(map[string]any)
+	m["indices"] = indices
+	for i := range c.indices {
+		var n uint64
+		for _, list := range c.indices[i].data {
+			n += uint64(list.len)
+		}
+		indices[c.indices[i].name] = n
+	}
+	c.mutex.Unlock()
+	return m
+}
+
 // Cap returns the maximum capacity (size) of cache.
 func (c *Cache[T]) Cap() int {
 	c.mutex.Lock()
@@ -538,6 +556,12 @@ func (c *Cache[T]) Cap() int {
 func (c *Cache[T]) store_value(index *Index, key Key, value T) {
 	// Alloc new index item.
 	item := new_indexed_item()
+	if cap(item.indexed) < len(c.indices) {
+
+		// Preallocate item indices slice to prevent Go auto
+		// allocating overlying large slices we don't need.
+		item.indexed = make([]*index_entry, 0, len(c.indices))
+	}
 
 	// Create COPY of value.
 	value = c.copy(value)
@@ -604,6 +628,14 @@ func (c *Cache[T]) store_error(index *Index, key Key, err error) {
 
 	// Alloc new index item.
 	item := new_indexed_item()
+	if cap(item.indexed) < len(c.indices) {
+
+		// Preallocate item indices slice to prevent Go auto
+		// allocating overlying large slices we don't need.
+		item.indexed = make([]*index_entry, 0, len(c.indices))
+	}
+
+	// Set error val.
 	item.data = err
 
 	// Append item to index.
